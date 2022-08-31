@@ -1,43 +1,38 @@
 import s from './Modal.module.scss';
 import { createPortal } from 'react-dom';
 import PropTypes from 'prop-types';
-import { Component } from 'react';
+import { useEffect } from 'react';
 
 const modal = document.querySelector('#modal-root');
 
-class Modal extends Component {
-  state = {};
+function Modal({ onClick, children }) {
 
-  componentDidMount() {
-    window.addEventListener('keydown', this.listenerKeyDown);
-  }
+  useEffect(() => {
+    document.addEventListener('keydown', listenerKeyDown);
+    return () => {
+      document.removeEventListener('keydown', listenerKeyDown);
+    };
+  })
 
-  componentWillUnmount() {
-    window.removeEventListener('keydown', this.listenerKeyDown);
-  }
-
-  listenerKeyDown = e => {
+  const listenerKeyDown = e => {
     if (e.code === 'Escape') {
-      this.props.onClick();
+      onClick();
     }
   };
 
-  onClikCloseBackDrop = ({ target, currentTarget }) => {
+  const onClikCloseBackDrop = ({ target, currentTarget }) => {
     if (target === currentTarget) {
-      this.props.onClick();
+      onClick();
     }
   };
 
-  render() {
-    return createPortal(
-      <div className={ s.bg } onClick={ this.onClikCloseBackDrop }>
-        <div className={ s.modal }>{ this.props.children }</div>
-      </div>,
-      modal
-    );
-  }
+  return createPortal(
+    <div className={ s.bg } onClick={ onClikCloseBackDrop }>
+      <div className={ s.modal }>{ children }</div>
+    </div>,
+    modal
+  );
 }
-
 export default Modal;
 
 Modal.propTypes = {

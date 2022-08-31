@@ -19,7 +19,6 @@ function App() {
     if (search === '') {
       return;
     }
-
     setLoading(true);
 
     getImages(search, page)
@@ -53,7 +52,7 @@ function App() {
 
     setLoading(true);
     getImages(search, page)
-      .then(({ hits, total }) => {
+      .then(({ hits }) => {
         if (hits.length <= 12) {
           setShowBtn(false);
         }
@@ -69,11 +68,13 @@ function App() {
 
   const onSubmitData = dataSearch => {
     setSearch(dataSearch)
+    setPage(1)
   };
 
   const onClickAddImg = () => {
     setPage(prevState => prevState + 1)
   };
+
 
   const onClickToggleModal = () => {
     setShowModal(!showModal);
@@ -85,9 +86,6 @@ function App() {
     showTitle(name)
   };
 
-
-  // const { onSubmitData, onClickAddImg, renderImgInModal, onClickToggleModal } = this;
-  // const { arrImage, showBtn, loading, showModal, title } = this.state;
   return (
     <>
       <div className={ s.app }>
